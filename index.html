@@ -4,144 +4,63 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0a1a0f">
 <title>Gregge Smart</title>
 <style>
 :root {
-  --bg: #0a1a0f; --bg2: #0f2318; --bg3: #162e1e;
-  --green: #2dff6e; --green-dim: #1a9940; --green-faint: #0d3320;
-  --amber: #ffb830; --red: #ff4444;
-  --text: #d4f0dc; --text-dim: #6a9e78; --border: #1e3d28;
+  --bg:#0a1a0f;--bg2:#0f2318;--bg3:#162e1e;
+  --green:#2dff6e;--green-dim:#1a9940;--green-faint:#0d3320;
+  --amber:#ffb830;--red:#ff4444;
+  --text:#d4f0dc;--text-dim:#6a9e78;--border:#1e3d28;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'Helvetica Neue', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; }
-
-header {
-  position: sticky; top: 0; z-index: 100;
-  background: var(--bg); padding: 16px 20px 10px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.logo-text { font-family: monospace; font-size: 12px; font-weight: bold; color: var(--green); letter-spacing: 3px; }
-.logo-sub { font-size: 9px; color: var(--text-dim); letter-spacing: 2px; margin-top: 2px; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
-.status-dot.active { background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-.summary {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  border-bottom: 1px solid var(--border);
-}
-.sum-cell { background: var(--bg2); padding: 14px 0; text-align: center; }
-.sum-cell + .sum-cell { border-left: 1px solid var(--border); }
-.sum-num { font-family: monospace; font-size: 28px; font-weight: bold; color: var(--green); }
-.sum-num.red { color: var(--red); }
-.sum-label { font-size: 9px; color: var(--text-dim); letter-spacing: 2px; margin-top: 3px; }
-
-.scan-section { padding: 16px 20px; }
-.btn-scan {
-  width: 100%; padding: 18px;
-  border: 1.5px solid var(--green); border-radius: 4px;
-  background: transparent; color: var(--green);
-  font-family: monospace; font-size: 12px; font-weight: bold;
-  letter-spacing: 3px; cursor: pointer; transition: all 0.2s;
-}
-.btn-scan.scanning { border-color: var(--amber); color: var(--amber); animation: scan-glow 1.5s infinite; }
-.btn-scan.disabled { border-color: #333; color: #333; cursor: default; }
-@keyframes scan-glow { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 12px rgba(255,184,48,0.3)} }
-.scan-hint { font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 10px; line-height: 1.6; }
-
-.section-hdr { display: flex; justify-content: space-between; padding: 4px 20px 10px; }
-.section-title { font-family: monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 3px; }
-.section-count { font-family: monospace; font-size: 10px; color: var(--green-dim); }
-
-.tag-list { padding: 0 12px 120px; display: flex; flex-direction: column; gap: 8px; }
-
-.tag-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 6px; overflow: hidden; animation: slidein 0.3s ease;
-}
-.tag-card.live { border-color: var(--green-dim); }
-.tag-card.stale { border-color: #2a2a00; }
-.tag-card.lost { border-color: #2a0000; }
-@keyframes slidein { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
-
-.tag-main { display: flex; align-items: center; padding: 14px; gap: 12px; cursor: pointer; }
-.tag-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.tag-dot.live { background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite; }
-.tag-dot.stale { background: var(--amber); }
-.tag-dot.lost { background: var(--red); }
-
-.tag-name-block { flex: 1; min-width: 0; }
-.tag-name { font-size: 15px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tag-id { font-family: monospace; font-size: 9px; color: var(--text-dim); margin-top: 2px; }
-.tag-age { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
-
-.tag-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-.signal-bars { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
-.signal-bars span { width: 3px; border-radius: 1px; background: var(--border); }
-.signal-bars span:nth-child(1){height:4px}
-.signal-bars span:nth-child(2){height:7px}
-.signal-bars span:nth-child(3){height:10px}
-.signal-bars span:nth-child(4){height:14px}
-.signal-bars.s4 span { background: var(--green); }
-.signal-bars.s3 span:nth-child(-n+3) { background: var(--green-dim); }
-.signal-bars.s2 span:nth-child(-n+2) { background: var(--amber); }
-.signal-bars.s1 span:nth-child(1) { background: var(--red); }
-
-.dist-badge {
-  font-family: monospace; font-size: 11px; color: var(--green);
-  background: var(--green-faint); padding: 2px 7px; border-radius: 2px;
-}
-
-.tag-detail { display: none; border-top: 1px solid var(--border); padding: 14px; background: #0b1c12; }
-.tag-detail.open { display: block; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.detail-cell { background: var(--bg3); border-radius: 4px; padding: 10px 12px; }
-.detail-key { font-size: 8px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
-.detail-val { font-family: monospace; font-size: 14px; font-weight: bold; color: var(--text); }
-.detail-val.green { color: var(--green); }
-.detail-val.amber { color: var(--amber); }
-.detail-val.red { color: var(--red); }
-.batt-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 5px; overflow: hidden; }
-.batt-fill { height: 100%; border-radius: 2px; }
-.raw-box { background: var(--bg3); border-radius: 4px; padding: 10px 12px; margin-bottom: 12px; }
-.raw-hex { font-family: monospace; font-size: 10px; color: var(--green-dim); line-height: 1.8; word-break: break-all; }
-.name-row { display: flex; gap: 8px; }
-.name-input {
-  flex: 1; background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 4px; padding: 8px 10px; color: var(--text);
-  font-size: 13px; outline: none;
-}
-.name-input:focus { border-color: var(--green-dim); }
-.btn-save {
-  padding: 8px 14px; background: var(--green-faint);
-  border: 1px solid var(--green-dim); border-radius: 4px;
-  color: var(--green); font-family: monospace; font-size: 10px;
-  letter-spacing: 1px; cursor: pointer;
-}
-
-.empty { padding: 60px 40px; text-align: center; opacity: 0.5; }
-.empty-icon { font-size: 48px; margin-bottom: 16px; }
-.empty-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
-
-.toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
-  padding: 10px 18px; font-family: monospace; font-size: 11px; color: var(--text);
-  opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-.add-btn {
-  position: fixed; bottom: 24px; right: 20px;
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--green-faint); border: 1.5px solid var(--green);
-  color: var(--green); font-size: 24px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 20px rgba(45,255,110,0.2);
-}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:var(--bg);padding:16px 20px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo-text{font-family:monospace;font-size:12px;font-weight:bold;color:var(--green);letter-spacing:3px}
+.logo-sub{font-size:9px;color:var(--text-dim);letter-spacing:2px;margin-top:2px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--border)}
+.sum-cell{background:var(--bg2);padding:14px 0;text-align:center}
+.sum-cell+.sum-cell{border-left:1px solid var(--border)}
+.sum-num{font-family:monospace;font-size:28px;font-weight:bold;color:var(--green)}
+.sum-num.red{color:var(--red)}
+.sum-label{font-size:9px;color:var(--text-dim);letter-spacing:2px;margin-top:3px}
+.scan-section{padding:16px 20px}
+.btn-scan{width:100%;padding:18px;border:1.5px solid var(--green);border-radius:4px;background:transparent;color:var(--green);font-family:monospace;font-size:12px;font-weight:bold;letter-spacing:3px;cursor:pointer}
+.scan-hint{font-size:11px;color:var(--text-dim);text-align:center;margin-top:10px;line-height:1.6}
+.section-hdr{display:flex;justify-content:space-between;padding:4px 20px 10px}
+.section-title{font-family:monospace;font-size:10px;color:var(--text-dim);letter-spacing:3px}
+.tag-list{padding:0 12px 120px;display:flex;flex-direction:column;gap:8px}
+.tag-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.tag-card.live{border-color:var(--green-dim)}
+.tag-main{display:flex;align-items:center;padding:14px;gap:12px;cursor:pointer}
+.tag-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.tag-dot.live{background:var(--green);box-shadow:0 0 10px var(--green)}
+.tag-dot.stale{background:var(--amber)}
+.tag-dot.lost{background:var(--red)}
+.tag-name-block{flex:1;min-width:0}
+.tag-name{font-size:15px;font-weight:600;color:var(--text)}
+.tag-id{font-family:monospace;font-size:9px;color:var(--text-dim);margin-top:2px}
+.tag-meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.dist-badge{font-family:monospace;font-size:11px;color:var(--green);background:var(--green-faint);padding:2px 7px;border-radius:2px}
+.tag-detail{display:none;border-top:1px solid var(--border);padding:14px;background:#0b1c12}
+.tag-detail.open{display:block}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.detail-cell{background:var(--bg3);border-radius:4px;padding:10px 12px}
+.detail-key{font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.detail-val{font-family:monospace;font-size:14px;font-weight:bold;color:var(--text)}
+.detail-val.green{color:var(--green)}
+.detail-val.amber{color:var(--amber)}
+.detail-val.red{color:var(--red)}
+.raw-box{background:var(--bg3);border-radius:4px;padding:10px 12px;margin-bottom:12px}
+.raw-hex{font-family:monospace;font-size:10px;color:var(--green-dim);line-height:1.8;word-break:break-all}
+.name-row{display:flex;gap:8px}
+.name-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 10px;color:var(--text);font-size:13px;outline:none}
+.btn-save{padding:8px 14px;background:var(--green-faint);border:1px solid var(--green-dim);border-radius:4px;color:var(--green);font-family:monospace;font-size:10px;cursor:pointer}
+.empty{padding:60px 40px;text-align:center;opacity:.5}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-text{font-size:13px;color:var(--text-dim);line-height:1.6}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 18px;font-family:monospace;font-size:11px;color:var(--text);opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -151,35 +70,22 @@ header {
     <div class="logo-text">🐑 GREGGE SMART</div>
     <div class="logo-sub">v1.0 · BLE SCANNER</div>
   </div>
-  <div class="status-dot" id="statusDot"></div>
 </header>
 
 <div class="summary">
-  <div class="sum-cell">
-    <div class="sum-num" id="cntTotal">0</div>
-    <div class="sum-label">TOTALE</div>
-  </div>
-  <div class="sum-cell">
-    <div class="sum-num" id="cntLive">0</div>
-    <div class="sum-label">PRESENTI</div>
-  </div>
-  <div class="sum-cell">
-    <div class="sum-num" id="cntLost">0</div>
-    <div class="sum-label">PERSI</div>
-  </div>
+  <div class="sum-cell"><div class="sum-num" id="cntTotal">0</div><div class="sum-label">TOTALE</div></div>
+  <div class="sum-cell"><div class="sum-num" id="cntLive">0</div><div class="sum-label">PRESENTI</div></div>
+  <div class="sum-cell"><div class="sum-num" id="cntLost">0</div><div class="sum-label">PERSI</div></div>
 </div>
 
 <div class="scan-section">
-  <button class="btn-scan" id="btnScan" onclick="addTag()">+ AGGIUNGI TAG</button>
-  <div class="scan-hint" id="scanHint">
-    Premi per aggiungere un tag BLE.<br>
-    Avvicina il telefono al collare dell'animale.
-  </div>
+  <button class="btn-scan" id="btnScan">+ AGGIUNGI TAG</button>
+  <div class="scan-hint" id="scanHint">Premi per aggiungere un tag BLE.<br>Avvicina il telefono al collare.</div>
 </div>
 
 <div class="section-hdr">
   <span class="section-title">TAG RILEVATI</span>
-  <span class="section-count" id="sectionCount">—</span>
+  <span id="sectionCount">—</span>
 </div>
 
 <div class="tag-list" id="tagList">
@@ -192,61 +98,26 @@ header {
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATO ──────────────────────────────────────────────────────
-const tags = new Map();
-const names = JSON.parse(localStorage.getItem('gs_names') || '{}');
-const devices = new Map(); // deviceId → BLEDevice
 const COMPANY_ID = 0xFFFF;
-const STALE_MS = 30000;
-const LOST_MS = 60000;
+const tags = new Map();
+const devices = new Map();
+const names = JSON.parse(localStorage.getItem('gs_names')||'{}');
 
-// ── PARSING PAYLOAD ────────────────────────────────────────────
-function parsePayload(dataView) {
-  try {
-    const b = [];
-    for (let i = 0; i < dataView.byteLength; i++) b.push(dataView.getUint8(i));
-    if (b.length < 16) return null;
-    let xor = 0;
-    for (let i = 0; i < 16; i++) xor ^= b[i];
-    return {
-      tagId:    (b[1] << 8) | b[0],
-      animalId: (b[5]<<24)|(b[4]<<16)|(b[3]<<8)|b[2],
-      type:     b[6],
-      battV:    (b[7]/100).toFixed(2),
-      battPct:  b[8],
-      flags:    b[9]||0,
-      bootCnt:  (b[11]<<8)|b[10],
-      uptime:   (b[15]<<24)|(b[14]<<16)|(b[13]<<8)|b[12],
-      csOk:     b.length>=17 ? b[16]===(xor&0xFF) : true,
-      raw:      b.map(x=>x.toString(16).padStart(2,'0').toUpperCase()).join(' ')
-    };
-  } catch(e) { return null; }
-}
-
-function rssiToDist(rssi) {
-  if (!rssi || rssi >= 0) return '—';
-  const d = Math.pow(10, (-59 - rssi) / 25);
-  return d < 100 ? `~${Math.round(d)}m` : '>100m';
-}
-
-function rssiLevel(rssi) {
-  if (rssi >= -60) return 4;
-  if (rssi >= -70) return 3;
-  if (rssi >= -80) return 2;
-  return 1;
-}
-
-// ── AGGIUNGI TAG (richiede selezione utente) ───────────────────
-async function addTag() {
+document.getElementById('btnScan').addEventListener('click', async function() {
+  showToast('Apertura selettore BLE...');
+  
   if (!navigator.bluetooth) {
-    showToast('Web Bluetooth non disponibile. Usa Chrome su Android.');
+    showToast('ERRORE: Web Bluetooth non disponibile');
     return;
   }
+
   try {
-    showToast('Avvicina il telefono al tag...');
     const device = await navigator.bluetooth.requestDevice({
-      filters: [{ manufacturerData: [{ companyIdentifier: COMPANY_ID }] }]
+      acceptAllDevices: true,
+      optionalServices: []
     });
+
+    showToast('Dispositivo selezionato: ' + (device.name || device.id));
 
     if (devices.has(device.id)) {
       showToast('Tag già presente!');
@@ -255,19 +126,17 @@ async function addTag() {
 
     devices.set(device.id, device);
 
-    // Ascolta advertisements in tempo reale
-    device.addEventListener('advertisementreceived', (event) => {
-      const mf = event.manufacturerData.get(COMPANY_ID);
-      if (!mf) return;
-      const parsed = parsePayload(mf);
+    device.addEventListener('advertisementreceived', function(event) {
+      const mf = event.manufacturerData ? event.manufacturerData.get(COMPANY_ID) : null;
+      const parsed = mf ? parsePayload(mf) : null;
       const existing = tags.get(device.id);
       tags.set(device.id, {
         id: device.id,
-        name: names[device.id] || existing?.name || 'Tag #' + (tags.size + 1),
-        rssi: event.rssi,
-        parsed,
+        name: names[device.id] || existing?.name || (device.name || 'Tag #' + (tags.size + 1)),
+        rssi: event.rssi || -70,
+        parsed: parsed,
         lastSeen: Date.now(),
-        firstSeen: existing?.firstSeen || Date.now(),
+        firstSeen: existing ? existing.firstSeen : Date.now(),
         state: 'live'
       });
       renderTags();
@@ -275,118 +144,122 @@ async function addTag() {
 
     await device.watchAdvertisements();
 
-    // Aggiunge subito con stato live
     tags.set(device.id, {
       id: device.id,
-      name: names[device.id] || 'Tag #' + (tags.size + 1),
-      rssi: -60,
+      name: names[device.id] || device.name || 'Tag #' + (tags.size + 1),
+      rssi: -70,
       parsed: null,
       lastSeen: Date.now(),
       firstSeen: Date.now(),
       state: 'live'
     });
 
-    document.getElementById('statusDot').classList.add('active');
     showToast('Tag aggiunto! In ascolto...');
     renderTags();
 
   } catch(e) {
-    if (e.name !== 'NotFoundError') showToast('Errore: ' + e.message);
-    else showToast('Selezione annullata');
+    if (e.name === 'NotFoundError') {
+      showToast('Selezione annullata');
+    } else {
+      showToast('Errore: ' + e.name + ' - ' + e.message);
+    }
   }
+});
+
+function parsePayload(dv) {
+  try {
+    const b = [];
+    for (let i = 0; i < dv.byteLength; i++) b.push(dv.getUint8(i));
+    if (b.length < 16) return null;
+    let xor = 0;
+    for (let i = 0; i < 16; i++) xor ^= b[i];
+    return {
+      tagId: (b[1]<<8)|b[0],
+      animalId: (b[5]<<24)|(b[4]<<16)|(b[3]<<8)|b[2],
+      type: b[6],
+      battV: (b[7]/100).toFixed(2),
+      battPct: b[8],
+      bootCnt: (b[11]<<8)|b[10],
+      uptime: (b[15]<<24)|(b[14]<<16)|(b[13]<<8)|b[12],
+      csOk: b.length>=17 ? b[16]===(xor&0xFF) : true,
+      raw: b.map(x=>x.toString(16).padStart(2,'0').toUpperCase()).join(' ')
+    };
+  } catch(e) { return null; }
 }
 
-// ── AGGIORNAMENTO STATI ────────────────────────────────────────
-setInterval(() => {
+function rssiToDist(rssi) {
+  if (!rssi || rssi >= 0) return '—';
+  return Math.round(Math.pow(10,(-59-rssi)/25)) + 'm';
+}
+
+setInterval(function() {
   const now = Date.now();
-  let changed = false;
-  tags.forEach((tag) => {
+  tags.forEach(function(tag) {
     const age = now - tag.lastSeen;
-    const prev = tag.state;
-    tag.state = age > LOST_MS ? 'lost' : age > STALE_MS ? 'stale' : 'live';
-    if (tag.state !== prev) changed = true;
+    tag.state = age > 60000 ? 'lost' : age > 30000 ? 'stale' : 'live';
   });
-  if (changed) renderTags();
   updateSummary();
+  if (tags.size > 0) renderTags();
 }, 5000);
 
-// ── RENDER ─────────────────────────────────────────────────────
 function renderTags() {
   const list = document.getElementById('tagList');
   if (tags.size === 0) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">📡</div><div class="empty-text">Nessun tag aggiunto.<br>Premi il pulsante per aggiungere un tag.</div></div>`;
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📡</div><div class="empty-text">Nessun tag aggiunto.<br>Premi il pulsante per aggiungere un tag.</div></div>';
     updateSummary();
     return;
   }
 
-  const sorted = [...tags.values()].sort((a,b) => (b.rssi||−100)-(a.rssi||−100));
+  const sorted = Array.from(tags.values()).sort(function(a,b){ return (b.rssi||0)-(a.rssi||0); });
 
-  sorted.forEach(tag => {
+  sorted.forEach(function(tag) {
     const p = tag.parsed;
-    const level = rssiLevel(tag.rssi);
-    const dist = rssiToDist(tag.rssi);
     const age = Math.round((Date.now()-tag.lastSeen)/1000);
+    const isOpen = document.getElementById('detail-'+tag.id) && document.getElementById('detail-'+tag.id).classList.contains('open');
     const battColor = !p ? 'green' : p.battPct > 50 ? 'green' : p.battPct > 20 ? 'amber' : 'red';
-    const battFillColor = !p ? '#2dff6e' : p.battPct > 50 ? '#2dff6e' : p.battPct > 20 ? '#ffb830' : '#ff4444';
-    const isOpen = document.getElementById('detail-'+tag.id)?.classList.contains('open');
-    const animalCode = p && p.animalId > 0 ? 'IT'+String(p.animalId).padStart(9,'0') : tag.id.slice(-8).toUpperCase();
 
-    const html = `
-    <div class="tag-card ${tag.state}" id="card-${tag.id}">
-      <div class="tag-main" onclick="toggleDetail('${tag.id}')">
-        <div class="tag-dot ${tag.state}"></div>
-        <div class="tag-name-block">
-          <div class="tag-name">${esc(tag.name)}</div>
-          <div class="tag-id">${animalCode}</div>
-          <div class="tag-age">${tag.state==='live'?'ora':age+'s fa'}</div>
-        </div>
-        <div class="tag-meta">
-          <div style="display:flex;align-items:center;gap:5px">
-            <div class="signal-bars s${level}"><span></span><span></span><span></span><span></span></div>
-            <span style="font-family:monospace;font-size:10px;color:var(--text-dim)">${tag.rssi||'—'}</span>
-          </div>
-          <div class="dist-badge">${dist}</div>
-        </div>
-      </div>
-      <div class="tag-detail ${isOpen?'open':''}" id="detail-${tag.id}">
-        ${p ? `
-        <div class="detail-grid">
-          <div class="detail-cell"><div class="detail-key">TAG ID</div><div class="detail-val">#${String(p.tagId).padStart(4,'0')}</div></div>
-          <div class="detail-cell"><div class="detail-key">TIPO</div><div class="detail-val">${p.type===0?'SLAVE':'MASTER'}</div></div>
-          <div class="detail-cell">
-            <div class="detail-key">BATTERIA</div>
-            <div class="detail-val ${battColor}">${p.battPct}% · ${p.battV}V</div>
-            <div class="batt-bar"><div class="batt-fill" style="width:${p.battPct}%;background:${battFillColor}"></div></div>
-          </div>
-          <div class="detail-cell"><div class="detail-key">UPTIME</div><div class="detail-val">${fmtUptime(p.uptime)}</div></div>
-          <div class="detail-cell"><div class="detail-key">BOOT #</div><div class="detail-val">${p.bootCnt}</div></div>
-          <div class="detail-cell"><div class="detail-key">CHECKSUM</div><div class="detail-val ${p.csOk?'green':'red'}">${p.csOk?'OK ✓':'ERR ✗'}</div></div>
-        </div>
-        <div class="raw-box"><div class="detail-key">RAW HEX</div><div class="raw-hex">${p.raw}</div></div>
-        ` : '<div class="raw-box"><div class="detail-key">In attesa del primo segnale...</div></div>'}
-        <div class="detail-key" style="margin-bottom:6px">NOME PERSONALIZZATO</div>
-        <div class="name-row">
-          <input class="name-input" id="inp-${tag.id}" placeholder="es. Pecora Bianca 3" value="${esc(tag.name)}">
-          <button class="btn-save" onclick="saveName('${tag.id}')">SALVA</button>
-        </div>
-      </div>
-    </div>`;
+    const html = '<div class="tag-card ' + tag.state + '" id="card-' + tag.id + '">' +
+      '<div class="tag-main" onclick="toggleDetail(\'' + tag.id + '\')">' +
+        '<div class="tag-dot ' + tag.state + '"></div>' +
+        '<div class="tag-name-block">' +
+          '<div class="tag-name">' + esc(tag.name) + '</div>' +
+          '<div class="tag-id">' + tag.id.slice(-8).toUpperCase() + '</div>' +
+          '<div class="tag-id">' + (tag.state==='live'?'ora':age+'s fa') + '</div>' +
+        '</div>' +
+        '<div class="tag-meta">' +
+          '<div style="font-family:monospace;font-size:10px;color:var(--text-dim)">' + (tag.rssi||'—') + ' dBm</div>' +
+          '<div class="dist-badge">' + rssiToDist(tag.rssi) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="tag-detail ' + (isOpen?'open':'') + '" id="detail-' + tag.id + '">' +
+        (p ?
+          '<div class="detail-grid">' +
+            '<div class="detail-cell"><div class="detail-key">TAG ID</div><div class="detail-val">#' + String(p.tagId).padStart(4,'0') + '</div></div>' +
+            '<div class="detail-cell"><div class="detail-key">TIPO</div><div class="detail-val">' + (p.type===0?'SLAVE':'MASTER') + '</div></div>' +
+            '<div class="detail-cell"><div class="detail-key">BATTERIA</div><div class="detail-val ' + battColor + '">' + p.battPct + '% · ' + p.battV + 'V</div></div>' +
+            '<div class="detail-cell"><div class="detail-key">BOOT #</div><div class="detail-val">' + p.bootCnt + '</div></div>' +
+          '</div>' +
+          '<div class="raw-box"><div class="detail-key">RAW HEX</div><div class="raw-hex">' + p.raw + '</div></div>'
+        : '<div class="raw-box"><div class="detail-key">In attesa del primo segnale...</div></div>') +
+        '<div class="detail-key" style="margin-bottom:6px">NOME</div>' +
+        '<div class="name-row">' +
+          '<input class="name-input" id="inp-' + tag.id + '" placeholder="es. Pecora Bianca 3" value="' + esc(tag.name) + '">' +
+          '<button class="btn-save" onclick="saveName(\'' + tag.id + '\')">SALVA</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
 
     const existing = document.getElementById('card-'+tag.id);
     if (existing) existing.outerHTML = html;
     else list.insertAdjacentHTML('beforeend', html);
   });
 
-  // Rimuovi card obsolete
-  list.querySelectorAll('[id^="card-"]').forEach(el => {
-    if (!tags.has(el.id.replace('card-',''))) el.remove();
-  });
-
   updateSummary();
 }
 
 function toggleDetail(id) {
-  document.getElementById('detail-'+id)?.classList.toggle('open');
+  const d = document.getElementById('detail-'+id);
+  if (d) d.classList.toggle('open');
 }
 
 function saveName(id) {
@@ -396,26 +269,19 @@ function saveName(id) {
   localStorage.setItem('gs_names', JSON.stringify(names));
   const tag = tags.get(id);
   if (tag) tag.name = input.value.trim();
-  showToast('Nome salvato: ' + input.value.trim());
+  showToast('Salvato: ' + input.value.trim());
   renderTags();
 }
 
 function updateSummary() {
   const total = tags.size;
-  const live = [...tags.values()].filter(t=>t.state==='live').length;
-  const lost = [...tags.values()].filter(t=>t.state==='lost').length;
+  const live = Array.from(tags.values()).filter(function(t){return t.state==='live';}).length;
+  const lost = Array.from(tags.values()).filter(function(t){return t.state==='lost';}).length;
   document.getElementById('cntTotal').textContent = total;
   document.getElementById('cntLive').textContent = live;
   document.getElementById('cntLost').textContent = lost;
   document.getElementById('cntLost').className = 'sum-num' + (lost>0?' red':'');
   document.getElementById('sectionCount').textContent = total>0 ? total+' tag' : '—';
-}
-
-function fmtUptime(s) {
-  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
-  if(h>0) return h+'h'+m+'m';
-  if(m>0) return m+'m'+sec+'s';
-  return sec+'s';
 }
 
 function esc(s) {
@@ -425,19 +291,11 @@ function esc(s) {
 let toastT;
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg;
+  t.classList.add('show');
   clearTimeout(toastT);
-  toastT = setTimeout(()=>t.classList.remove('show'), 2500);
-}
-
-// Avvisa se BLE non disponibile
-  console.log('BT:', navigator.bluetooth);
-alert('BT disponibile: ' + (navigator.bluetooth ? 'SI' : 'NO'));
-if (!navigator.bluetooth) {
-  document.getElementById('scanHint').textContent = '⚠ Usa Chrome su Android per il BLE reale.';
-  document.getElementById('btnScan').classList.add('disabled');
-  document.getElementById('btnScan').onclick = () => showToast('Apri con Chrome su Android');
+  toastT = setTimeout(function(){t.classList.remove('show');}, 3000);
 }
 </script>
 </body>
-  </html>
+</html>
