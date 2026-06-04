@@ -431,6 +431,8 @@ function showToast(msg) {
 }
 
 // Avvisa se BLE non disponibile
+  console.log('BT:', navigator.bluetooth);
+alert('BT disponibile: ' + (navigator.bluetooth ? 'SI' : 'NO'));
 if (!navigator.bluetooth) {
   document.getElementById('scanHint').textContent = '⚠ Usa Chrome su Android per il BLE reale.';
   document.getElementById('btnScan').classList.add('disabled');
